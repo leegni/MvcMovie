@@ -109,20 +109,32 @@ namespace MvcMovie.Controllers
         }
 
         // GET: Movies/Delete/5
-        public ActionResult Delete(int? id)
+              public ActionResult Delete(int? id)
+              {
+                  if (id == null)
+                  {
+                      return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                  }
+                  Movie movie = db.Movies.Find(id);
+                  if (movie == null)
+                  {
+                      return HttpNotFound();
+                  }
+                  return View(movie);
+              }
+        
+    /*    public ActionResult Delete(FormCollection fcNotUsed, int id = 0)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             Movie movie = db.Movies.Find(id);
             if (movie == null)
             {
                 return HttpNotFound();
             }
-            return View(movie);
+            db.Movies.Remove(movie);
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
-
+    */
         // POST: Movies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
